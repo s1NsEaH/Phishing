@@ -10,9 +10,11 @@ import argparse
 import threading
 from os import path
 import smtplib
-import json
 import queue
 import whois
+from OpenSSL import SSL
+from cryptography import x509
+from cryptography.x509.oid import NameOID
 
 try:
 	from dns.resolver import Resolver, NXDOMAIN, NoNameservers
@@ -369,7 +371,7 @@ class DomainThread(threading.Thread):
 
 		self.option_extdns = False
 		self.option_geoip = False
-		self.option_banners = False
+		self.get_certificate = False
 		self.option_mxcheck = False
 
 		self.nameservers = []
@@ -379,21 +381,27 @@ class DomainThread(threading.Thread):
 		if self.debug:
 			print(str(text), file=sys.stderr, flush=True)
             
-	def __banner_http(self, ip, vhost):
+	def __get_certificate(self,hostname, port):
 		try:
-			http = socket.socket()
-			http.settimeout(1)
-			http.connect((ip, 80))
-			http.send('HEAD / HTTP/1.1\r\nHost: {}\r\nUser-agent: {}\r\n\r\n'.format(vhost, self.useragent).encode())
-			response = http.recv(1024).decode()
-			http.close()
+			hostname_idna = idna.encode(hostname)
+			sock = socket.socket()
+			sock.connect((hostname, port))
+			peername = sock.getpeername()
+			ctx = SSL.Context(SSL.SSLv23_METHOD) # most compatible
+			ctx.check_hostname = False
+			ctx.verify_mode = SSL.VERIFY_NONE
+			sock_ssl = SSL.Connection(ctx, sock)
+			sock_ssl.set_connect_state()
+			sock_ssl.set_tlsext_host_name(hostname_idna)
+			sock_ssl.do_handshake()
+			cert = sock_ssl.get_peer_certificate()
+			crypto_cert = cert.to_cryptography()
+			sock_ssl.close()
+			sock.close()
+			return crypto_cert
 		except Exception:
 			pass
-		else:
-			headers = response.splitlines()
-			for field in headers:
-				if field.lower().startswith('server: '):
-					return field[8:]
+    
                 
 	def __banner_smtp(self, mx):
 		try:
@@ -535,27 +543,26 @@ class DomainThread(threading.Thread):
 						if country:
 							domain['geoip-country'] = country.split(',')[0]
 
-			if self.option_banners:
-				if dns_a is True:
-					banner = self.__banner_http(domain['dns-a'][0], domain['domain-name'])
-					if banner:
-						domain['banner-http'] = banner
-				if dns_mx is True:
-					banner = self.__banner_smtp(domain['dns-mx'][0])
-					if banner:
-						domain['banner-smtp'] = banner
-
+			if self.get_certificate:
+				hostinfo = self.__get_certificate(domain['domain-name'],443)
+				if hostinfo:
+					domain['notbefore'] = str(hostinfo.not_valid_before).split(' ')[0]
+					issuer = hostinfo.issuer.get_attributes_for_oid(NameOID.COMMON_NAME)
+                    try:
+						domain['issuer'] = str(issuer[0].value).replace(",","")
+					except:
+						pass
 			self.jobs.task_done()
-            
+
 def create_csv(domains=[]):
-	csv = ['fuzzer,domain,dns-a,dns-aaaa,dns-mx,dns-ns,geoip-country,whois-registrar,whois-created']
+	csv = ['fuzzer,domain,dns-a,dns-aaaa,dns-mx,dns-ns,geoip-country,whois-registrar,whois-created,notbefore,issuer']
 	for domain in domains:
 		csv.append(','.join([domain.get('fuzzer'), domain.get('domain-name'),
 			';'.join(domain.get('dns-a', [])),
 			';'.join(domain.get('dns-aaaa', [])),
 			';'.join(domain.get('dns-mx', [])),
 			';'.join(domain.get('dns-ns', [])),
-			domain.get('geoip-country', ''), domain.get('whois-registrar', ''), domain.get('whois-created', '')]))
+			domain.get('geoip-country', ''), domain.get('whois-registrar', ''), domain.get('whois-created', ''), domain.get('notbefore', ''), domain.get('issuer', '')]))
 	return '\n'.join(csv)
 
 def main():
@@ -628,7 +635,7 @@ def main():
 			worker.option_extdns = True
 		if MODULE_GEOIP:
 			worker.option_geoip = True
-		worker.option_banners = True
+		worker.get_certificate = True
 		worker.option_mxcheck = True
 		worker.nameservers = nameservers
 		worker.useragent = USERAGENT
