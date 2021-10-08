@@ -548,7 +548,7 @@ class DomainThread(threading.Thread):
 				if hostinfo:
 					domain['notbefore'] = str(hostinfo.not_valid_before).split(' ')[0]
 					issuer = hostinfo.issuer.get_attributes_for_oid(NameOID.COMMON_NAME)
-                    try:
+					try:
 						domain['issuer'] = str(issuer[0].value).replace(",","")
 					except:
 						pass
