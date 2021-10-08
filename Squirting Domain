@@ -15,6 +15,8 @@ import whois
 from OpenSSL import SSL
 from cryptography import x509
 from cryptography.x509.oid import NameOID
+from urllib import request
+from bs4 import BeautifulSoup
 
 try:
 	from dns.resolver import Resolver, NXDOMAIN, NoNameservers
@@ -403,20 +405,15 @@ class DomainThread(threading.Thread):
 			pass
     
                 
-	def __banner_smtp(self, mx):
+	def __get_title(self, hostname):
 		try:
-			smtp = socket.socket()
-			smtp.settimeout(1)
-			smtp.connect((mx, 25))
-			response = smtp.recv(1024).decode()
-			smtp.close()
+			html = request.urlopen("http://"+hostname).read().decode('utf8')
+			html[:60]
+			soup = BeautifulSoup(html, 'html.parser')
+			title = soup.find('title')
+			return title
 		except Exception:
 			pass
-		else:
-			hello = response.splitlines()[0]
-			if hello.startswith('220'):
-				return hello[4:].strip()
-			return hello[:40]
 
 	def __mxcheck(self, mx, from_domain, to_domain):
 		from_addr = 'IamBob1997@' + from_domain
@@ -504,7 +501,7 @@ class DomainThread(threading.Thread):
 						domain['dns-mx'] = ['!ServFail']
 					except DNSException as e:
 						self.__debug(e)
-                        
+
 			else:
 				try:
 					ip = socket.getaddrinfo(domain['domain-name'], 80)
@@ -526,11 +523,11 @@ class DomainThread(threading.Thread):
 					dns_a = True
 					dns_aaaa = True
 
-			if self.option_mxcheck:
-				if dns_mx is True:
-					if domain['domain-name'] != self.domain_init:
-						if self.__mxcheck(domain['dns-mx'][0], self.domain_init, domain['domain-name']):
-							domain['mx-spy'] = True
+			if self.get_title:
+				title = self.__get_title(domain['domain-name'])
+
+				if title:
+					domain['title'] = str(title.string).replace(",","")
 
 			if self.option_geoip:
 				if dns_a is True:
@@ -555,14 +552,14 @@ class DomainThread(threading.Thread):
 			self.jobs.task_done()
 
 def create_csv(domains=[]):
-	csv = ['fuzzer,domain,dns-a,dns-aaaa,dns-mx,dns-ns,geoip-country,whois-registrar,whois-created,notbefore,issuer']
+	csv = ['fuzzer,domain,dns-a,dns-aaaa,dns-mx,dns-ns,geoip-country,whois-registrar,whois-created,notbefore,issuer,title']
 	for domain in domains:
 		csv.append(','.join([domain.get('fuzzer'), domain.get('domain-name'),
 			';'.join(domain.get('dns-a', [])),
 			';'.join(domain.get('dns-aaaa', [])),
 			';'.join(domain.get('dns-mx', [])),
 			';'.join(domain.get('dns-ns', [])),
-			domain.get('geoip-country', ''), domain.get('whois-registrar', ''), domain.get('whois-created', ''), domain.get('notbefore', ''), domain.get('issuer', '')]))
+			domain.get('geoip-country', ''), domain.get('whois-registrar', ''), domain.get('whois-created', ''), domain.get('notbefore', ''), domain.get('issuer', ''),domain.get('title', '')]))
 	return '\n'.join(csv)
 
 def main():
@@ -636,7 +633,7 @@ def main():
 		if MODULE_GEOIP:
 			worker.option_geoip = True
 		worker.get_certificate = True
-		worker.option_mxcheck = True
+		worker.get_title = True
 		worker.nameservers = nameservers
 		worker.useragent = USERAGENT
 		worker.debug = False
