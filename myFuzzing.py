@@ -407,7 +407,7 @@ class domainThread(threading.Thread):
 				if code.status == 403:
 					req = requests.get(self.uri_scheme + '://' + hostname, timeout=REQUEST_TIMEOUT_HTTP, headers=headers, verify=False)
 					soup = BeautifulSoup(req.content, 'html.parser')
-					sleep(2)
+					time.sleep(2.0)
 					return soup.title.string
 			except Exception as e:
 				self.__debug(e)
