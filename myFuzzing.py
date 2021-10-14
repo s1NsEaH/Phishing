@@ -46,8 +46,8 @@ except ImportError:
 	MODULE_DNSPYTHON = False
 
 try:
-	from crytography.x509.old import NameOID
-	from crytography import x509
+	from cryptography.x509.oid import NameOID
+	from cryptography import x509
 	from OpenSSL import SSL
 	MODULE_OPENSSL = True
 except ImportError:
