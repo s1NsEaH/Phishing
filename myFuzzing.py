@@ -519,6 +519,11 @@ class domainThread(threading.Thread):
 					domain['dns-a'] = sorted(domain['dns-a'])
 					dns_a = True
 
+			if self.option_mxcheck:
+				if dns_mx is True:
+					if domain['domain-name'] != self.domain_init:
+						if self.__mxcheck(domain['dns-mx'][0], self.domain_init, domain['domain-name']):
+							domain['mx-spy'] = True
 			if self.get_title:
 				title = self.__get_title(domain['domain-name'])
 				if title:
@@ -639,6 +644,8 @@ def main():
 							domain['whois-created'] = str(whoisq.creation_date).split(' ')[0]
 						if whoisq.registrar:
 							domain['whois-registrar'] = str(whoisq.registrar).replace(",","")
+						if whoisq.country:
+							domain['country'] = str(whoisq.country)
 
 		if domains:
 			print(create_csv(idx, domains))
