@@ -76,7 +76,6 @@ except ImportError:
 
 VALID_FQDN_REGEX = re.compile(r'(?=^.{4,253}$)(^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+[a-z0-9-]{2,63}$)', re.IGNORECASE)
 
-
 REQUEST_TIMEOUT_DNS = 2.5
 REQUEST_RETRIES_DNS = 2
 REQUEST_TIMEOUT_HTTP = 5
@@ -118,7 +117,6 @@ class urlParser():
 				self.domain = self.authority.split(':')[0].lower()
 				if not self.__validate_domain(self.domain):
 					raise ValueError('Invalid domain name')
-
 
 	def __validate_domain(self, domain):
 		if len(domain) > 253:
@@ -261,7 +259,6 @@ class makeDomainFuzz():
 
 	def __hyphenation(self):
 		return [self.domain[:i] + '-' + self.domain[i:] for i in range(1, len(self.domain))]
-
 
 	def __insertion(self):
 		result = set()
@@ -412,7 +409,7 @@ class domainThread(threading.Thread):
 			except Exception as e:
 				self.__debug(e)
 				pass
-
+'''
 	def __get_country(self):
 		if dns_a is True:
 			try:
@@ -425,7 +422,7 @@ class domainThread(threading.Thread):
 			else:
 				if country:
 					domain['country'] = country
-
+'''
 	def __mxcheck(self, mx, from_domain, to_domain):
 		from_addr = 'IamBob1997@' + from_domain
 		to_addr = 'YouAreAlice1997@' + to_domain
@@ -537,7 +534,6 @@ class domainThread(threading.Thread):
 						domain['issuer'] = str(issuer[0].value).replace(',','')
 					except:
 						pass
-
 			self.jobs.task_done()
 
 def create_csv(idx, domains = []):
@@ -571,7 +567,6 @@ def main():
 
 	signal.signal(signal.SIGINT, signal_handler)
 	signal.signal(signal.SIGTERM, signal_handler)
-
 	nameservers = ['8.8.8.8']
 
 	tld = "./tldlist.txt"
