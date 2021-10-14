@@ -1,0 +1,7 @@
+#Tested on Ubuntu 18.04 with Python version 3.7
+beautifulsoup4==4.10.0
+python-whois==0.7.3
+pyOpenSSL==21.0.0
+dnspython>=1.14.0
+requests>=2.20.0
+tld>=0.9.1
