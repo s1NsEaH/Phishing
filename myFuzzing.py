@@ -522,7 +522,7 @@ class domainThread(threading.Thread):
 			if self.get_title:
 				title = self.__get_title(domain['domain-name'])
 				if title:
-					domain['title'] = str(title).replace('.','')
+					domain['title'] = str(title).replace(',','')
 			if self.get_certificate:
 				hostinfo = self.__get_certificate(domain['domain-name'], 443)
 				if hostinfo:
