@@ -42,6 +42,7 @@ try:
 	from dns.resolver import Resolver, NXDOMAIN, NoNameservers
 	import dns.rdatatype
 	from dns.exception import DNSException
+	MODULE_DNSPYTHON = True
 except ImportError:
 	MODULE_DNSPYTHON = False
 
