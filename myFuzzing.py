@@ -394,20 +394,7 @@ class domainThread(threading.Thread):
 			except Exception as e:
 				self.__debug(e)
 				pass
-	'''
-	def __get_country(self):
-		if dns_a is True:
-			try:
-				obj = IPWhois(domain['dns-a'][0])
-				results = obj.lookup_rws()
-				country = (results['nets'][0]['country'])
-			except Exception as e:
-				self.__debug(e)
-				pass
-			else:
-				if country:
-					domain['country'] = country
-	'''
+
 	def __answer_to_list(self, answers):
 		return sorted([str(x).split(' ')[-1].rstrip('.') for x in answers])
 
