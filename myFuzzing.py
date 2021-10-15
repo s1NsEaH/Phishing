@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Tested on python version >= 3.7
 import re
 import sys
 import socket
