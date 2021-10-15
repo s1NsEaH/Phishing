@@ -7,7 +7,6 @@ import signal
 import time
 import threading
 from os import path
-import smtplib
 import queue
 from urllib import request
 from urllib.error import HTTPError
@@ -409,19 +408,6 @@ class domainThread(threading.Thread):
 				if country:
 					domain['country'] = country
 	'''
-	def __mxcheck(self, mx, from_domain, to_domain):
-		from_addr = 'IamBob1997@' + from_domain
-		to_addr = 'YouAreAlice1997@' + to_domain
-		try:
-			smtp = smtplib.SMTP(mx, 25, timeout = REQUEST_TIMEOUT_SMTP)
-			smtp.sendmail(from_addr, to_addr, 'I wish you well')
-			smtp.quit()
-
-		except Exception:
-			return False
-		else:
-			return True
-
 	def __answer_to_list(self, answers):
 		return sorted([str(x).split(' ')[-1].rstrip('.') for x in answers])
 
