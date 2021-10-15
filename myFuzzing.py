@@ -145,19 +145,12 @@ class makeDomainFuzz():
 			'a': 'qwsz', 's': 'edxzaw', 'd': 'rfcxse', 'f': 'tgvcdr', 'g': 'yhbvft', 'h': 'ujnbgy', 'j': 'ikmnhu', 'k': 'olmji', 'l': 'kop',
 			'z': 'asx', 'x': 'zsdc', 'c': 'xdfv', 'v': 'cfgb', 'b': 'vghn', 'n': 'bhjm', 'm': 'njk'
 			}
-		self.qwertz = {
-			'1': '2q', '2': '3wq1', '3': '4ew2', '4': '5re3', '5': '6tr4', '6': '7zt5', '7': '8uz6', '8': '9iu7', '9': '0oi8', '0': 'po9',
-			'q': '12wa', 'w': '3esaq2', 'e': '4rdsw3', 'r': '5tfde4', 't': '6zgfr5', 'z': '7uhgt6', 'u': '8ijhz7', 'i': '9okju8', 'o': '0plki9', 'p': 'lo0',
-			'a': 'qwsy', 's': 'edxyaw', 'd': 'rfcxse', 'f': 'tgvcdr', 'g': 'zhbvft', 'h': 'ujnbgz', 'j': 'ikmnhu', 'k': 'olmji', 'l': 'kop',
-			'y': 'asx', 'x': 'ysdc', 'c': 'xdfv', 'v': 'cfgb', 'b': 'vghn', 'n': 'bhjm', 'm': 'njk'
+		self.tenkey = {
+			'a': 'bc', 'b': 'ac', 'c': 'ab', 'd': 'ef', 'e': 'df', 'f': 'de', 'g': 'hi', 'h': 'gi', 'i': 'gh', 'j': 'kl', 'k': 'jl', 'l': 'jk', 'm': 'no',
+			'n': 'mo', 'o': 'nm', 'p': 'qrs', 'q': 'prs', 'r':'pqs', 's': 'pqr', 't': 'uv', 'u': 'tv', 'v': 'tu', 'w': 'xyz', 'x': 'wyz', 'y': 'wxz', 'z': 'wxy'
 			}
-		self.azerty = {
-			'1': '2a', '2': '3za1', '3': '4ez2', '4': '5re3', '5': '6tr4', '6': '7yt5', '7': '8uy6', '8': '9iu7', '9': '0oi8', '0': 'po9',
-			'a': '2zq1', 'z': '3esqa2', 'e': '4rdsz3', 'r': '5tfde4', 't': '6ygfr5', 'y': '7uhgt6', 'u': '8ijhy7', 'i': '9okju8', 'o': '0plki9', 'p': 'lo0m',
-			'q': 'zswa', 's': 'edxwqz', 'd': 'rfcxse', 'f': 'tgvcdr', 'g': 'yhbvft', 'h': 'ujnbgy', 'j': 'iknhu', 'k': 'olji', 'l': 'kopm', 'm': 'lp',
-			'w': 'sxq', 'x': 'wsdc', 'c': 'xdfv', 'v': 'cfgb', 'b': 'vghn', 'n': 'bhj'
-			}
-		self.keyboards = [self.qwerty, self.qwertz, self.azerty]
+
+		self.keyboards = [self.qwerty, self.tenkey]
 		self.glyphs = {
 			'2': ['ƻ'],
 			'5': ['ƽ'],
@@ -340,17 +333,12 @@ class makeDomainFuzz():
 
 		self.__postprocess()
 
-	def permutations(self, registered = False, dns_all = False):
+	def permutations(self, registered = False):
 		domains = []
 		if registered:
 			domains = [x.copy() for x in self.domains if len(x) > 2]
 		else:
 			domains = self.domains.copy()
-		if not dns_all:
-			for i in range(len(domains)):
-				for k in ('dns-ns', 'dns-a', 'dns-mx'):
-					if k in domains[i]:
-						domains[i][k] = domains[i][k][:1]
 		return domains
 
 class domainThread(threading.Thread):
@@ -610,7 +598,7 @@ def main():
 
 		qperc = 0
 		while not jobs.empty():
-			qcurr = 100 * (len(domains) - jobs.qsize()) / len(domains) / len(hosts)
+			qcurr = 100 * (len(domains) - jobs.qsize()) / len(domains)
 			if qcurr - 20 >= qperc:
 				qperc = qcurr
 				p_err('%u%%' % qperc)
@@ -641,7 +629,6 @@ def main():
 							domain['whois-registrar'] = str(whoisq.registrar).replace(",","")
 						if whoisq.country:
 							domain['country'] = str(whoisq.country)
-
 		if domains:
 			print(create_csv(idx, domains))
 	_exit(0)
