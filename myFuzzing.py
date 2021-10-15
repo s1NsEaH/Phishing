@@ -382,7 +382,7 @@ class domainThread(threading.Thread):
 		if MODULE_BS4:
 			headers = {'User-Agent': self.useragent}
 			try:
-				html = request.urlopen('http://'+hostname, timeout=REQUEST_TIMEOUT_HTTP, data=bytes(json.dumps(headers), encoding="utf-8"))
+				html = request.urlopen(self.uri_scheme + '://' + hostname, timeout=REQUEST_TIMEOUT_HTTP, data=bytes(json.dumps(headers), encoding="utf-8"))
 				soup = BeautifulSoup(html, 'html.parser')
 				title = soup.find('title')
 				return title
