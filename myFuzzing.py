@@ -350,7 +350,6 @@ class domainThread(threading.Thread):
 		self.uri_scheme = 'http'
 		self.option_extdns = False
 		self.get_certificate = False
-		self.option_mxcheck = False
 
 		self.nameservers = []
 		self.useragent = USERAGENT
@@ -504,11 +503,6 @@ class domainThread(threading.Thread):
 					domain['dns-a'] = sorted(domain['dns-a'])
 					dns_a = True
 
-			if self.option_mxcheck:
-				if dns_mx is True:
-					if domain['domain-name'] != self.domain_init:
-						if self.__mxcheck(domain['dns-mx'][0], self.domain_init, domain['domain-name']):
-							domain['mx-spy'] = True
 			if self.get_title:
 				title = self.__get_title(domain['domain-name'])
 				if title:
