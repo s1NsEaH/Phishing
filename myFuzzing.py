@@ -574,7 +574,7 @@ def main():
 			worker.stop()
 			worker.join()
 
-		domains = fuzz.permutations(registered=True, dns_all=False)
+		domains = fuzz.permutations(registered=True)
 
 		if MODULE_WHOIS:
 			for domain in domains:
