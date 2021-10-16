@@ -127,10 +127,10 @@ class urlParser():
 		return self.scheme + '://' + self.domain
 
 class makeDomainFuzz():
-	def __init__(self, domain, tld_dictionary = []):
+	def __init__(self, domain):
 		self.subdomain, self.domain, self.tld = self.domain_tld(domain)
 		self.domain = idna.decode(self.domain)
-		self.tld_dictionary = list(tld_dictionary)
+		self.tld_dictionary = ['com', 'xyz', 'info', 'ru', 'online', 'link', 'tk', 'cn', 'club', 'net']
 		self.domains = []
 		self.qwerty = {
 			'1': '2q', '2': '3wq1', '3': '4ew2', '4': '5re3', '5': '6tr4', '6': '7yt5', '7': '8uy6', '8': '9iu7', '9': '0oi8', '0': 'po9',
@@ -518,20 +518,13 @@ def main():
 	signal.signal(signal.SIGTERM, signal_handler)
 	nameservers = ['8.8.8.8']
 
-	tld = "./tldlist.txt"
-	if not path.exists(tld):
-		p_err('dictionary file not found: %s' % tld)
-	with open(tld) as f:
-		tld = set(f.read().splitlines())
-		tld = [x for x in tld if x.isalpha()]
-
 	hosts = ['shinhan.com', 'kbstar.com']
 	for idx, host in enumerate(hosts):
 		try:
 			url = urlParser(host) if host.isascii() else urlParser(idna.encode(host).decode())
 		except Exception as e:
 			p_err('invalid domain name: ' + host)
-		fuzz = makeDomainFuzz(url.domain, tld_dictionary=tld)
+		fuzz = makeDomainFuzz(url.domain)
 		fuzz.generate()
 		domains = fuzz.domains
 		p_err('%d. Processing %d permutations ' % (idx, len(domains)))
