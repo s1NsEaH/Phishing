@@ -15,12 +15,6 @@ import json
 def p_err(msg):
 	print(str('\033[93m'+msg+'\033[0m'), file = sys.stderr, flush = True)
 	pass
-try:
-	from ipwhois import IPWhois
-	MODULE_IPWHOIS = True
-except ImportError:
-	MODULE_IPWHOIS = False
-	p_err('No Module ipwhois')
 
 try:
 	from bs4 import BeautifulSoup
