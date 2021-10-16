@@ -22,14 +22,12 @@ try:
 except ImportError:
 	MODULE_BS4 = False
 	p_err('No Module bs4')
-
 try:
 	import whois
 	MODULE_WHOIS = True
 except ImportError:
 	MODULE_WHOIS = False
 	p_err('No Module whois')
-
 try:
 	from dns.resolver import Resolver, NXDOMAIN, NoNameservers
 	import dns.rdatatype
@@ -38,7 +36,6 @@ try:
 except ImportError:
 	MODULE_DNSPYTHON = False
 	p_err('No Module DNSPYTHON')
-	
 try:
 	from cryptography.x509.oid import NameOID
 	from cryptography import x509
@@ -47,7 +44,6 @@ try:
 except ImportError:
 	MODULE_OPENSSL = False
 	p_err('No Module OpenSSL')
-
 try:
 	import requests
 	requests.packages.urllib3.disable_warnings()
@@ -55,7 +51,6 @@ try:
 except ImportError:
 	MODULE_REQUESTS = False
 	p_err('No Module Requests')
-
 try:
 	import idna
 except ImportError:
@@ -67,14 +62,13 @@ except ImportError:
 		def encode(domain):
 			return domain.encode('idna')
 
-VALID_FQDN_REGEX = re.compile(r'(?=^.{4,253}$)(^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+[a-z0-9-]{2,63}$)', re.IGNORECASE)
-
 REQUEST_TIMEOUT_DNS = 2.5
 REQUEST_RETRIES_DNS = 2
 REQUEST_TIMEOUT_HTTP = 5
 REQUEST_TIMEOUT_SMTP = 5
 THREAD_COUNT_DEFAULT = 10
 USERAGENT = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36"
+VALID_FQDN_REGEX = re.compile(r'(?=^.{4,253}$)(^((?!-)[a-z0-9-]{1,63}(?<!-)\.)+[a-z0-9-]{2,63}$)', re.IGNORECASE)
 
 class urlParser():
 	def __init__(self, url):
@@ -142,7 +136,6 @@ class makeDomainFuzz():
 			'a': 'bc', 'b': 'ac', 'c': 'ab', 'd': 'ef', 'e': 'df', 'f': 'de', 'g': 'hi', 'h': 'gi', 'i': 'gh', 'j': 'kl', 'k': 'jl', 'l': 'jk', 'm': 'no',
 			'n': 'mo', 'o': 'nm', 'p': 'qrs', 'q': 'prs', 'r':'pqs', 's': 'pqr', 't': 'uv', 'u': 'tv', 'v': 'tu', 'w': 'xyz', 'x': 'wyz', 'y': 'wxz', 'z': 'wxy'
 			}
-
 		self.keyboards = [self.qwerty, self.tenkey]
 		self.glyphs = {
 			'2': ['ƻ'],
@@ -174,7 +167,6 @@ class makeDomainFuzz():
 			'y': ['ʏ', 'ý', 'ÿ', 'ŷ', 'ƴ', 'ȳ', 'ɏ', 'ỿ', 'ẏ', 'ỵ'],
 			'z': ['ʐ', 'ż', 'ź', 'ᴢ', 'ƶ', 'ẓ', 'ẕ', 'ⱬ']
 			}
-
 	@staticmethod
 	def domain_tld(domain):
 		try:
@@ -293,7 +285,6 @@ class makeDomainFuzz():
 	def __addition(self):
 		return [self.domain + chr(i) for i in range(97, 123)]
 
-
 	def __tld(self):
 		if self.tld in self.tld_dictionary:
 			self.tld_dictionary.remove(self.tld)
@@ -343,7 +334,6 @@ class domainThread(threading.Thread):
 		self.uri_scheme = 'http'
 		self.option_extdns = False
 		self.get_certificate = False
-
 		self.nameservers = []
 		self.useragent = USERAGENT
 
@@ -498,7 +488,6 @@ def create_csv(idx, domains = []):
 	return '\n'.join(csv)
 
 def main():
-
 	def _exit(code):
 		sys.exit(code)
 
@@ -538,15 +527,13 @@ def main():
 			worker.setDaemon(True)
 			worker.uri_scheme = url.scheme
 			worker.domain_init = url.domain
-
-			if MODULE_DNSPYTHON:
-				worker.option_extdns = True
-
 			worker.get_certificate = True
 			worker.get_title = True
 			worker.nameservers = nameservers
 			worker.useragent = USERAGENT
-			worker.debug = True
+			worker.debug = False
+			if MODULE_DNSPYTHON:
+				worker.option_extdns = True
 			worker.start()
 			threads.append(worker)
 
