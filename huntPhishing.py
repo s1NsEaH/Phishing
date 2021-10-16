@@ -37,7 +37,8 @@ try:
 	MODULE_DNSPYTHON = True
 except ImportError:
 	MODULE_DNSPYTHON = False
-
+	p_err('No Module DNSPYTHON')
+	
 try:
 	from cryptography.x509.oid import NameOID
 	from cryptography import x509
