@@ -65,13 +65,21 @@ S. Carolin Jeeva 저자의 'Intelligent phishing url detection using association
 보안 기업 Bolster의 2021년 State of Phishing& Online Fraud 보고서에서 나타난 피싱에 흔히 이용된 TLD 상위 10 목록을 대상으로 입력 도메인의 TLD와 치환합니다.
 
 [피싱 사이트 특징 추출]
-1. SSL 인증서 정보
+1. SSL 발급 기관 정보
+SSL은 더 이상 안전한 사이트의 지표가 아닙니다.
+APWG에서 보고한 바 2020년 4분기에 조사된 피싱 사이트의 무려 84%가 SSL을 사용했습니다.
+이는 분기마다 약 3%씩 증가하는 장기 추세를 계속 이어가고 있습니다.
+netcraft사는 1년간 탐지된 피싱사이트 수를 기준으로 상위 10개 피싱 인증 기관을 보여줍니다.
 
-2. DNS 등록 정보
+2. SSL 만기 날짜
+SSL 인증서의 유효 날짜가 만기되었다면, 해당 사이트는 일반적으로 지속적으로 관리가 되지 않는 방치된 사이트로서 위협 호스트일 가능성이 높습니다.
 
-3. 메일 서버 유무
+3. DNS 등록 정보
 
-4. 웹 타이틀 정보
+
+4. 메일 서버 유무
+
+5. 웹 타이틀 정보
 
 
 
@@ -82,6 +90,7 @@ https://raw.githubusercontent.com/rpaditya/rtbh/master/etc/domain/http%3A..data.
 
 
 [참고 자료]
+https://trends.netcraft.com/cybercrime/certificate_authorities / 상위 10개 피싱 인증 기관
 https://bolster.ai/resources-center/download/report/2021-phishing-online-fraud?utm_source=blog&utm_medium=web&utm_campaign=2021-phishing-report&utm_content=2021-phishing-online-fraud / 금융 섹터 피싱 위협 순위 참조
 https://manuscriptlink-society-file.s3-ap-northeast-1.amazonaws.com/kips/conference/kips2020spring/KIPS_C2020A0162.pdf / 최근 퍼징 기법들과 발전에 관한 연구
 http://eprints.hud.ac.uk/id/eprint/24330/6/MohammadPhishing14July2015.pdf / Phishing Websites Features
