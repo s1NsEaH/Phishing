@@ -75,12 +75,13 @@ netcraft사는 1년간 탐지된 피싱사이트 수를 기준으로 상위 10�
 SSL 인증서의 유효 날짜가 만기되었다면, 해당 사이트는 일반적으로 지속적으로 관리가 되지 않는 방치된 사이트로서 위협 호스트일 가능성이 높습니다.
 
 3. DNS 등록 정보
+Interisle사의 Phishing Landscape 2020: A Study of the Scope and Distribution of Phishing 보고서는 악의적으로 등록된 도메인 이름의 65%가 등록 후 5일 이내에 피싱에 사용된다고 말합니다.
 
-
-4. 메일 서버 유무
+4. MX record
+MX 레코드는 받는 사람의 도메인을 대신하여 전자 메일 메시지를 보내고 수락하는 메일 서버를 지정하는 도메인 이름 시스템의 리소스 레코드 유형으로 피셔는 유사 도메인의 MX 레코드를 활성화하거나 활성 MX 레코드가 있는 유사한 도메인을 획득하여 공격합니다.
 
 5. 웹 타이틀 정보
-
+HTTP TITLE 태그는 페이지의 콘텐츠를 요약하는 헤드 라인 역할로서 공격자는 피해자를 정상 사이트로 오인하게 하기 위해 목표가 되는 브랜드와 동일한 상호명을 사용할 수 있습니다.
 
 
 2. 공개 인텔리전스를 활용한 피싱 탐지
@@ -91,6 +92,7 @@ https://raw.githubusercontent.com/rpaditya/rtbh/master/etc/domain/http%3A..data.
 
 [참고 자료]
 https://trends.netcraft.com/cybercrime/certificate_authorities / 상위 10개 피싱 인증 기관
+https://www.interisle.net/PhishingLandscape2020.pdf / PhishingLandscape2020
 https://bolster.ai/resources-center/download/report/2021-phishing-online-fraud?utm_source=blog&utm_medium=web&utm_campaign=2021-phishing-report&utm_content=2021-phishing-online-fraud / 금융 섹터 피싱 위협 순위 참조
 https://manuscriptlink-society-file.s3-ap-northeast-1.amazonaws.com/kips/conference/kips2020spring/KIPS_C2020A0162.pdf / 최근 퍼징 기법들과 발전에 관한 연구
 http://eprints.hud.ac.uk/id/eprint/24330/6/MohammadPhishing14July2015.pdf / Phishing Websites Features
