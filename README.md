@@ -39,7 +39,8 @@ Bitsquatting은 컴퓨터 오류(비트 플립)로 알려진 1비트 오류 즉,
 http://xn--shinhn-7nf.com/
 
 3. 하이픈(hyphen) 삽입
-S. Carolin Jeeva 저자의 'Intelligent phishing url detection using association rule mining' 논문에서 드물게 정상 사이트의 경우 최대 1개의 하이픈을 가지는 것으로 확인되며, 이에 따라 공격자는 사용자가 정상 사이트로 오인하도록 하이픈을 피싱 도메인에 이용할 수 있습니다.
+공격자는 정상적인 사이트로 보이기 위해 하이픈을 삽입하는 경향이 있습니다.
+S. Carolin Jeeva 저자의 'Intelligent phishing url detection using association rule mining' 연구에서는 정상 사이트의 경우 최대 1개의 하이픈을 가지며, 두 개 이상은 하이픈은 피싱 사이트로 나타났습니다. 이에 공격자는 최소 한개 이상의 하이픈을 사용하여 피싱 도메인으로 사용할 수 있습니다.
 
 4. 입력 문자 제거, 추가, 반복 및 치환
 입력 값의 변이 정도 기준은 편집거리 알고리즘에 대한 결과 값 1로 산정했습니다.
