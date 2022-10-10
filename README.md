@@ -74,22 +74,3 @@ MX 레코드는 받는 사람의 도메인을 대신하여 전자 메일 메시�
 
 5. 웹 타이틀 정보
 HTTP TITLE 태그는 페이지의 콘텐츠를 요약하는 헤드 라인 역할로서 공격자는 피해자를 정상 사이트로 오인하게 하기 위해 목표가 되는 브랜드와 동일한 상호명을 사용할 수 있습니다.
-
-
-2. 공개 인텔리전스를 활용한 피싱 탐지
-
-https://raw.githubusercontent.com/rpaditya/rtbh/master/etc/domain/http%3A..data.phishtank.com.data.online-valid.csv
-
-
-
-[참고 자료]
-https://www.ic3.gov/Media/PDF/AnnualReport/2020_IC3Report.pdf / FBI 사이버 범죄 보고서
-https://trends.netcraft.com/cybercrime/certificate_authorities / 상위 10개 피싱 인증 기관
-https://www.interisle.net/PhishingLandscape2020.pdf / PhishingLandscape2020
-https://bolster.ai/resources-center/download/report/2021-phishing-online-fraud?utm_source=blog&utm_medium=web&utm_campaign=2021-phishing-report&utm_content=2021-phishing-online-fraud / 금융 섹터 피싱 위협 순위 참조
-https://manuscriptlink-society-file.s3-ap-northeast-1.amazonaws.com/kips/conference/kips2020spring/KIPS_C2020A0162.pdf / 최근 퍼징 기법들과 발전에 관한 연구
-http://eprints.hud.ac.uk/id/eprint/24330/6/MohammadPhishing14July2015.pdf / Phishing Websites Features
-https://www.fuzzingbook.org/html/MutationFuzzer.html / Mutation-Based Fuzzing
-https://sec.okta.com/articles/2020/11/why-bitsquatting-attacks-are-here-stay / Why Bitsquatting Attacks Are Here to Stay
-Hunting Cyber Criminals: A Hacker's Guide to Online Intelligence Gathering Tools and Techniques
-https://thesai.org/Downloads/Volume11No4/Paper_77-Feature_Selection_for_Phishing_Website.pdf / Feature Selection for Phishing Website Classification
